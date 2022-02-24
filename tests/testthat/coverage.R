@@ -10,4 +10,4 @@ cobertura <- file_coverage(
     "tests/testthat/test_dummy_model.R"
   )
 )
-covr::codecov(coverage = cobertura, token = "ad0d0063-7fec-4b66-8c6b-17045b746776")
+covr::codecov(coverage = cobertura, token = "21a75c47-3624-40d2-9f9c-262a51e35d50")
