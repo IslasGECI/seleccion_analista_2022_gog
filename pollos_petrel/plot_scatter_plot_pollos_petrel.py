@@ -1,6 +1,7 @@
-import pandas as pd
+# import pandas as pd
 import seaborn as sns
+from .dummy_model import read_training_dataset
 
-training_dataset = pd.read_csv("train.csv")
 
-sns.scatterplot(data=training_dataset, x="Longitud_tarso", y="Longitud_ala", hue="target")
+def scatter_plot(xlabel, ylabels, hue):
+    return sns.scatterplot(data=read_training_dataset(), x=xlabels, y=ylabels, hue=hue)
