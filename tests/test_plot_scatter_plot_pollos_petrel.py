@@ -1,5 +1,4 @@
-import pytest
-from pollos_petrel import read_training_dataset, scatter_plot
+from pollos_petrel import scatter_plot
 
 
 def test_scatter_plot():
