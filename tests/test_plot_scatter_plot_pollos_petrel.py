@@ -1,4 +1,4 @@
-from pollos_petrel import scatter_plot
+from pollos_petrel import scatter_plot, plot_tarsus_vs_wing
 
 
 def test_scatter_plot():
