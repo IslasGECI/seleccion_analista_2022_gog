@@ -15,9 +15,9 @@ def test_train_linear_model():
     data = {"Masa": [1, 2, 3], "target": [2, 4, 6]}
     dataset = pd.DataFrame(data=data)
     obtained_parameters = train_linear_model(dataset)
-    obtained_a_parameter = round(obtained_parameters[0], 1)
-    expected_a_parameter = 2.0
-    assert obtained_a_parameter == expected_a_parameter
-    obtained_b_parameter = round(obtained_parameters[1], 1)
-    expected_b_parameter = 0.0
-    assert obtained_b_parameter == expected_b_parameter
+    obtained_slope = round(obtained_parameters[0])
+    expected_slope = 2.0
+    assert obtained_slope == expected_slope
+    obtained_y_intercept = round(obtained_parameters[1])
+    expected_y_intercept = 0.0
+    assert obtained_y_intercept == expected_y_intercept
