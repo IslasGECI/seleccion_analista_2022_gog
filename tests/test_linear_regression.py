@@ -1,5 +1,11 @@
-from pollos_petrel import linear_model, train_linear_model, predict_age_pollos_petrel
+from pollos_petrel import (
+    linear_model,
+    train_linear_model,
+    predict_age_pollos_petrel,
+    write_submission_age_pollos_petrel,
+)
 import pandas as pd
+import os
 
 
 def test_linear_model():
@@ -28,3 +34,13 @@ def test_predict_age_pollos_petrel():
     obtained_target = submission_predict_age_pollos_petrel.target[0]
     expected_target = 47.51226638168561
     assert expected_target == obtained_target
+
+
+# Guarda el archivo con sufijo _submission.csv
+def test_write_submission_age_pollos_petrel():
+    submission_path = "pollos_petrel/memo_1_submission.csv"
+    if os.path.exists(submission_path):
+        os.remove(submission_path)
+    write_submission_age_pollos_petrel()
+    assert os.path.exists(submission_path)
+    os.remove(submission_path)
