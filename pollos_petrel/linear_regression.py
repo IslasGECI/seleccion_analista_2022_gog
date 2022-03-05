@@ -24,3 +24,10 @@ def predict_age_pollos_petrel() -> pd.DataFrame:
     submission = drop_all_but_id(test_dataset)
     submission["target"] = predicted_target
     return submission
+
+
+# Guarda el archivo con sufijo _submission.csv
+def write_submission_age_pollos_petrel():
+    submission_path = "pollos_petrel/memo_1_submission.csv"
+    submission = predict_age_pollos_petrel()
+    submission.to_csv(submission_path)
