@@ -1,6 +1,7 @@
 submissions: \
     pollos_petrel/example_python_submission.csv \
-    pollos_petrel/example_r_submission.csv
+	pollos_petrel/example_r_submission.csv \
+	pollos_petrel/memo_1_submission.csv
 
 pollos_petrel/example_python_submission.csv: setup_python src/example_submission.py
 	@echo "Creating Python submission..."
@@ -9,6 +10,10 @@ pollos_petrel/example_python_submission.csv: setup_python src/example_submission
 pollos_petrel/example_r_submission.csv: setup_r src/example_submission.R
 	@echo "Creating R submission..."
 	src/example_submission.R
+
+pollos_petrel/memo_1_submission.csv: setup_python src/memo_1_submission.py
+	@echo "Creating Python submission..."
+	src/memo_1_submission.py
 
 module = pollos_petrel
 
