@@ -1,7 +1,7 @@
 from pollos_petrel import (
     linear_model,
-    train_linear_model,
     predict_age_pollos_petrel,
+    train_linear_model,
     write_submission_age_pollos_petrel,
 )
 import pandas as pd
