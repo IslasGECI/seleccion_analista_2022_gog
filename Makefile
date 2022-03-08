@@ -1,5 +1,5 @@
 submissions: \
-    pollos_petrel/example_python_submission.csv \
+	pollos_petrel/example_python_submission.csv \
 	pollos_petrel/example_r_submission.csv \
 	pollos_petrel/memo_1_submission.csv
 
