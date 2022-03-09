@@ -27,14 +27,19 @@ def drop_all_but_id(dataset: pd.DataFrame) -> pd.DataFrame:
     return dataset_only_id
 
 
+# Genera formato para subir la edad
+def get_submission(test_dataset, predicted_target):
+    submission = drop_all_but_id(test_dataset)
+    submission["target"] = predicted_target
+    return submission
+
+
 # Agrega columna target con el promedio
 def add_mean_as_target() -> pd.DataFrame:
     training_dataset = read_training_dataset()
-    target_mean = get_target_mean(training_dataset)
     testing_dataset = read_testing_dataset()
-    submission = drop_all_but_id(testing_dataset)
-    submission["target"] = target_mean
-    return submission
+    predicted_target = get_target_mean(training_dataset)
+    return get_submission(testing_dataset, predicted_target)
 
 
 # Guarda el archivo con sufijo _submission.csv

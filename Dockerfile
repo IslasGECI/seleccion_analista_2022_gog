@@ -11,8 +11,8 @@ RUN pip install --upgrade pip && pip install \
     pylint \
     pytest \
     pytest-cov \
+    pydantic \
     seaborn \
     sklearn \
     tensorflow
 RUN Rscript -e "install.packages(c('covr', 'devtools', 'lintr', 'roxygen2', 'styler', 'testthat', 'vdiffr'), repos='http://cran.rstudio.com')"
-

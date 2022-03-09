@@ -5,3 +5,4 @@ from .do_nothing import *  # noqa
 from .dummy_model import *  # noqa
 from .plot_scatter_plot_pollos_petrel import *  # noqa
 from .linear_regression import *  # noqa
+from .power_law_model import *  # noqa
