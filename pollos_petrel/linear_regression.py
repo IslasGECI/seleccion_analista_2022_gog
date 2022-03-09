@@ -15,15 +15,25 @@ def train_linear_model(dataset: pd.DataFrame):
     return parameters
 
 
+# Obtiene la edad usando un modelo lineal de la masa
+def get_target_from_linear_regression(train_dataset, test_dataset):
+    parameters = train_linear_model(train_dataset)
+    return linear_model(test_dataset.Masa, *parameters)
+
+
+# Genera formato para subir la edad
+def get_submission(test_dataset, predicted_target):
+    submission = drop_all_but_id(test_dataset)
+    submission["target"] = predicted_target
+    return submission
+
+
 # Predice la edad a partir de la masa con modelo lineal
 def predict_age_pollos_petrel() -> pd.DataFrame:
     train_dataset = read_training_dataset()
     test_dataset = read_testing_dataset()
-    parameters = train_linear_model(train_dataset)
-    predicted_target = linear_model(test_dataset.Masa, *parameters)
-    submission = drop_all_but_id(test_dataset)
-    submission["target"] = predicted_target
-    return submission
+    predicted_target = get_target_from_linear_regression(train_dataset, test_dataset)
+    return get_submission(test_dataset, predicted_target)
 
 
 # Guarda el archivo con sufijo _submission.csv
