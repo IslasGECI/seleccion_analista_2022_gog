@@ -1,6 +1,10 @@
 from scipy.optimize import curve_fit
 import pandas as pd
-from .dummy_model import read_training_dataset, read_testing_dataset, drop_all_but_id
+from .dummy_model import (
+    read_training_dataset,
+    read_testing_dataset,
+    get_submission,
+)
 
 
 # Modelo lineal
@@ -19,13 +23,6 @@ def train_linear_model(dataset: pd.DataFrame):
 def get_target_from_linear_regression(train_dataset, test_dataset):
     parameters = train_linear_model(train_dataset)
     return linear_model(test_dataset.Masa, *parameters)
-
-
-# Genera formato para subir la edad
-def get_submission(test_dataset, predicted_target):
-    submission = drop_all_but_id(test_dataset)
-    submission["target"] = predicted_target
-    return submission
 
 
 # Predice la edad a partir de la masa con modelo lineal
