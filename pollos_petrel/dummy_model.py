@@ -27,6 +27,13 @@ def drop_all_but_id(dataset: pd.DataFrame) -> pd.DataFrame:
     return dataset_only_id
 
 
+# Agrega la columna id
+def add_id(dataset_previous_id, dataset_with_id):
+    id_values = dataset_with_id.id
+    dataset_previous_id["id"] = id_values
+    return dataset_previous_id
+
+
 # Genera formato para subir la edad
 def get_submission(test_dataset, predicted_target):
     submission = drop_all_but_id(test_dataset)
