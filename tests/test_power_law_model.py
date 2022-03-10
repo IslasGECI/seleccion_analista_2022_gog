@@ -1,11 +1,27 @@
-from pollos_petrel import power_law_model, Power_Law_Parameters
+from pollos_petrel import power_law_model, train_power_law_model
+import pandas as pd
 
 
 def test_power_law_model():
     x = 4
-    parameters = Power_Law_Parameters(
-        **{"constant_factor": 2, "power_law_index": 0.5, "y_intercept": 1}
-    )
-    obtained_result = power_law_model(x, parameters)
+    constant_factor = 2
+    power_law_index = 0.5
+    y_intercept = 1
+    obtained_result = power_law_model(x, constant_factor, power_law_index, y_intercept)
     expected_result = 5
     assert obtained_result == expected_result
+
+
+def test_train_power_law_model():
+    data = {"Longitud_ala": [1, 4, 16], "target": [3, 5, 9]}
+    dataset = pd.DataFrame(data=data)
+    obtained_parameters = train_power_law_model(dataset)
+    obtained_constant_factor = round(obtained_parameters[0], 1)
+    expected_constant_factor = 2.0
+    assert obtained_constant_factor == expected_constant_factor
+    obtained_power_law_index = round(obtained_parameters[1], 1)
+    expected_power_law_index = 0.5
+    assert obtained_power_law_index == expected_power_law_index
+    obtained_y_intercept = round(obtained_parameters[2], 1)
+    expected_y_intercept = 1.0
+    assert obtained_y_intercept == expected_y_intercept
