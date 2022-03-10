@@ -10,5 +10,5 @@ def power_law_model(x, constant_factor, power_law_index, y_intercept):
 # Entrenar modelo ley de potencia
 def train_power_law_model(dataset):
     clean_dataset = dataset[~dataset.Longitud_ala.isnull()]
-    parameters = curve_fit(power_law_model, clean_dataset.Longitud_ala, clean_dataset.target)[0]
+    parameters = curve_fit(f=power_law_model,  xdata=clean_dataset.Longitud_ala, ydata= clean_dataset.target)[0]
     return parameters
