@@ -1,5 +1,6 @@
 from pollos_petrel import (
     add_mean_as_target,
+    add_id,
     drop_all_but_id,
     get_target_mean,
     read_testing_dataset,
@@ -43,6 +44,19 @@ def test_drop_all_but_id():
     obtained_columns = list(dataset_only_id.columns)
     expected_columns = ["id"]
     assert expected_columns == obtained_columns
+
+
+def test_add_id():
+    data_previous_id = {"target": [3, 4]}
+    dataset_previous_id = pd.DataFrame(data=data_previous_id)
+    data_with_id = {"id": [1, 2], "target": [3, 4]}
+    dataset_with_id = pd.DataFrame(data=data_with_id)
+    dataset_add_id = add_id(dataset_previous_id, dataset_with_id)
+    obtained_id = dataset_add_id.id[0]
+    expected_id = 1
+    assert obtained_id == expected_id
+    obtained_columns = list(dataset_add_id)
+    assert "id" in obtained_columns
 
 
 # Agrega columna target con el promedio
