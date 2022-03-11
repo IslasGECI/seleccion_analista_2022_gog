@@ -1,11 +1,5 @@
-from pollos_petrel import (
-    linear_model,
-    predict_age_pollos_petrel,
-    train_linear_model,
-    write_submission_age_pollos_petrel,
-)
+from pollos_petrel import linear_model, predict_age_pollos_petrel, train_linear_model
 import pandas as pd
-import os
 from pytest import approx
 
 
@@ -35,13 +29,3 @@ def test_predict_age_pollos_petrel():
     obtained_target = submission_predict_age_pollos_petrel.target[0]
     expected_target = 47.512
     assert expected_target == approx(obtained_target, 0.01)
-
-
-# Guarda el archivo con sufijo _submission.csv
-def test_write_submission_age_pollos_petrel():
-    submission_path = "pollos_petrel/memo_1_submission.csv"
-    if os.path.exists(submission_path):
-        os.remove(submission_path)
-    write_submission_age_pollos_petrel()
-    assert os.path.exists(submission_path)
-    os.remove(submission_path)
