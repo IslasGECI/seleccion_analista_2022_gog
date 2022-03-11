@@ -6,6 +6,7 @@ from pollos_petrel import (
 )
 import pandas as pd
 import os
+from pytest import approx
 
 
 def test_linear_model():
@@ -32,8 +33,8 @@ def test_train_linear_model():
 def test_predict_age_pollos_petrel():
     submission_predict_age_pollos_petrel = predict_age_pollos_petrel()
     obtained_target = submission_predict_age_pollos_petrel.target[0]
-    expected_target = 47.51226638168561
-    assert expected_target == obtained_target
+    expected_target = 47.512
+    assert expected_target == approx(obtained_target, 0.01)
 
 
 # Guarda el archivo con sufijo _submission.csv
