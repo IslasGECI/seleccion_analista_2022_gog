@@ -5,6 +5,7 @@ from pollos_petrel import (
     train_power_law_model,
 )
 import pandas as pd
+from pytest import approx
 
 
 def test_power_law_model():
@@ -42,5 +43,5 @@ def test_imputes_test_data():
 def test_predict_age_pollos_petrel_power_law():
     submission_predict_age_pollos_petrel = predict_age_pollos_petrel_power_law()
     obtained_target = submission_predict_age_pollos_petrel.target[0]
-    expected_target = 65.84275146861765
-    assert expected_target == obtained_target
+    expected_target = 65.842
+    assert expected_target == approx(obtained_target, 0.01)
