@@ -31,10 +31,3 @@ def predict_age_pollos_petrel() -> pd.DataFrame:
     test_dataset = read_testing_dataset()
     predicted_target = get_target_from_linear_regression(train_dataset, test_dataset)
     return get_submission(test_dataset, predicted_target)
-
-
-# Guarda el archivo con sufijo _submission.csv
-def write_submission_age_pollos_petrel():
-    submission_path = "pollos_petrel/memo_1_submission.csv"
-    submission = predict_age_pollos_petrel()
-    submission.to_csv(submission_path)
