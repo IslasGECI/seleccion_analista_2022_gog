@@ -22,11 +22,14 @@ def train_power_law_model(dataset):
     return parameters
 
 
-# Estima valores nan en datos test
-def imputes_test_data() -> pd.DataFrame:
-    test_dataset = read_testing_dataset()
+# Remover id de set de datos test
+def get_test_dataset_without_id(test_dataset):
     predicted_variables_list = list(test_dataset.columns[1:])
-    test_dataset_nonid = test_dataset[predicted_variables_list]
+    return test_dataset[predicted_variables_list]
+
+
+# Inicializar funcion imputer
+def init_imputer():
     imputer = IterativeImputer(
         estimator=KNeighborsRegressor(),
         random_state=1,
@@ -34,8 +37,21 @@ def imputes_test_data() -> pd.DataFrame:
         n_nearest_features=3,
         sample_posterior=False,
     )
+    return imputer
+
+
+# Aplica impute a set de datos test
+def impute_test_dataset(test_dataset_nonid, imputer):
+    predicted_variables_list = list(test_dataset_nonid.columns)
     imputer.fit(test_dataset_nonid)
     impute_values = imputer.transform(test_dataset_nonid)
-    test_dataset_impute = pd.DataFrame(impute_values, columns=predicted_variables_list)
-    test_dataset_impute_id = add_id(test_dataset_impute, test_dataset)
-    return test_dataset_impute_id
+    return pd.DataFrame(data=impute_values, columns=predicted_variables_list)
+
+
+# Estima valores nan en datos test
+def imputes_test_data() -> pd.DataFrame:
+    test_dataset = read_testing_dataset()
+    test_dataset_nonid = get_test_dataset_without_id(test_dataset)
+    imputer = init_imputer()
+    test_dataset_imputed = impute_test_dataset(test_dataset_nonid, imputer)
+    return add_id(test_dataset_imputed, test_dataset)
