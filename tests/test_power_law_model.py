@@ -1,4 +1,9 @@
-from pollos_petrel import imputes_test_data, power_law_model, train_power_law_model
+from pollos_petrel import (
+    imputes_test_data,
+    power_law_model,
+    predict_age_pollos_petrel_power_law,
+    train_power_law_model,
+)
 import pandas as pd
 
 
@@ -32,3 +37,10 @@ def test_imputes_test_data():
     obtained_longitud_ala = test_dataset_impute.Longitud_ala[0]
     expected_longitud_ala = 147.5
     assert obtained_longitud_ala == expected_longitud_ala
+
+
+def test_predict_age_pollos_petrel_power_law():
+    submission_predict_age_pollos_petrel = predict_age_pollos_petrel_power_law()
+    obtained_target = submission_predict_age_pollos_petrel.target[0]
+    expected_target = 65.84275146861765
+    assert expected_target == obtained_target
