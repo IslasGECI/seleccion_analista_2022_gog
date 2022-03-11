@@ -1,4 +1,4 @@
-from pollos_petrel import power_law_model, train_power_law_model
+from pollos_petrel import imputes_test_data, power_law_model, train_power_law_model
 import pandas as pd
 
 
@@ -25,3 +25,10 @@ def test_train_power_law_model():
     obtained_y_intercept = round(obtained_parameters[2], 1)
     expected_y_intercept = 1.0
     assert obtained_y_intercept == expected_y_intercept
+
+
+def test_imputes_test_data():
+    test_dataset_impute = imputes_test_data()
+    obtained_longitud_ala = test_dataset_impute.Longitud_ala[0]
+    expected_longitud_ala = 147.5
+    assert obtained_longitud_ala == expected_longitud_ala
