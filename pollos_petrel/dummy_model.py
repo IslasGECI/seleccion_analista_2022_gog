@@ -49,8 +49,7 @@ def add_mean_as_target() -> pd.DataFrame:
     return get_submission(testing_dataset, predicted_target)
 
 
-# Guarda el archivo con sufijo _submission.csv
-def write_submission():
-    submission_path = "pollos_petrel/example_python_submission.csv"
-    submission = add_mean_as_target()
+# Guarda el archivo con0 sufijo _submission.csv
+def write_submission(submission_path, predict_age):
+    submission = predict_age()
     submission.to_csv(submission_path)
