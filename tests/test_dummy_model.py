@@ -70,10 +70,10 @@ def test_add_mean_as_target():
 
 # Guarda el archivo con sufijo _submission.csv
 def test_write_submission():
-    init_submission_path = Path_To_Submission()
-    submission_path = init_submission_path.DummyModel
-    if os.path.exists(submission_path):
+    dict_submission_path = Path_To_Submission().dict()
+    for submission_path in dict_submission_path.values():
+        if os.path.exists(submission_path):
+            os.remove(submission_path)
+        write_submission(submission_path, add_mean_as_target)
+        assert os.path.exists(submission_path)
         os.remove(submission_path)
-    write_submission(submission_path, add_mean_as_target)
-    assert os.path.exists(submission_path)
-    os.remove(submission_path)
