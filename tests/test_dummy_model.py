@@ -9,6 +9,12 @@ from pollos_petrel import (
 )
 import os
 import pandas as pd
+import pydantic
+
+
+class Path_To_Submission(pydantic.BaseModel):
+    DummyModel = "pollos_petrel/example_python_submission.csv"
+    LinearModel = "pollos_petrel/memo_1_submission.csv"
 
 
 # Lee train.csv
@@ -69,9 +75,10 @@ def test_add_mean_as_target():
 
 # Guarda el archivo con sufijo _submission.csv
 def test_write_submission():
-    submission_path = "pollos_petrel/example_python_submission.csv"
+    init_submission_path = Path_To_Submission()
+    submission_path = init_submission_path.DummyModel
     if os.path.exists(submission_path):
         os.remove(submission_path)
-    write_submission()
+    write_submission(submission_path, add_mean_as_target)
     assert os.path.exists(submission_path)
     os.remove(submission_path)
