@@ -1,4 +1,10 @@
 import pandas as pd
+import pydantic
+
+
+class Path_To_Submission(pydantic.BaseModel):
+    DummyModel = "pollos_petrel/example_python_submission.csv"
+    LinearModel = "pollos_petrel/memo_1_submission.csv"
 
 
 # Lee train.csv
