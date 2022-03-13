@@ -1,10 +1,6 @@
 from scipy.optimize import curve_fit
 import pandas as pd
-from .dummy_model import (
-    read_training_dataset,
-    read_testing_dataset,
-    get_submission,
-)
+from .dummy_model import read_testing_dataset
 
 
 # Modelo lineal
@@ -26,8 +22,6 @@ def get_target_from_linear_regression(train_dataset, test_dataset):
 
 
 # Predice la edad a partir de la masa con modelo lineal
-def predict_age_pollos_petrel() -> pd.DataFrame:
-    train_dataset = read_training_dataset()
+def predict_target_linear_model(train_dataset) -> pd.DataFrame:
     test_dataset = read_testing_dataset()
-    predicted_target = get_target_from_linear_regression(train_dataset, test_dataset)
-    return get_submission(test_dataset, predicted_target)
+    return get_target_from_linear_regression(train_dataset, test_dataset)
