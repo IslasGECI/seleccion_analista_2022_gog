@@ -1,11 +1,11 @@
 import numpy as np
 from scipy.optimize import curve_fit
+from pollos_petrel import read_testing_dataset
 from sklearn.experimental import enable_iterative_imputer  # noqa
-from pollos_petrel import read_training_dataset, read_testing_dataset
 from sklearn.impute import IterativeImputer
 from sklearn.neighbors import KNeighborsRegressor
 import pandas as pd
-from .dummy_model import add_id, get_submission
+from .dummy_model import add_id
 
 
 # Modelo ley de potencia
@@ -64,9 +64,6 @@ def get_target_from_power_law(train_dataset, imputed_test_dataset):
 
 
 # Predice la edad a partir de la longitud del ala
-def predict_age_pollos_petrel_power_law() -> pd.DataFrame:
-    train_dataset = read_training_dataset()
-    test_dataset = read_testing_dataset()
+def predict_target_power_model(train_dataset) -> pd.DataFrame:
     imputed_test_dataset = imputes_test_data()
-    predicted_target = get_target_from_power_law(train_dataset, imputed_test_dataset)
-    return get_submission(test_dataset, predicted_target)
+    return get_target_from_power_law(train_dataset, imputed_test_dataset)
