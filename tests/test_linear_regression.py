@@ -1,4 +1,9 @@
-from pollos_petrel import linear_model, predict_age_pollos_petrel, train_linear_model
+from pollos_petrel import (
+    linear_model,
+    predict_target_linear_model,
+    read_training_dataset,
+    train_linear_model,
+)
 import pandas as pd
 from pytest import approx
 
@@ -24,8 +29,9 @@ def test_train_linear_model():
     assert obtained_y_intercept == expected_y_intercept
 
 
-def test_predict_age_pollos_petrel():
-    submission_predict_age_pollos_petrel = predict_age_pollos_petrel()
-    obtained_target = submission_predict_age_pollos_petrel.target[0]
+def test_predict_target_linear_model():
+    train_dataset = read_training_dataset()
+    submission_predict_age_pollos_petrel = predict_target_linear_model(train_dataset)
+    obtained_target = submission_predict_age_pollos_petrel[0]
     expected_target = 47.512
     assert expected_target == approx(obtained_target, 0.01)
