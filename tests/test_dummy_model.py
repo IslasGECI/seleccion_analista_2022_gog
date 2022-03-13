@@ -1,8 +1,9 @@
 from pollos_petrel import (
-    add_mean_as_target,
+    predict_target_dummy_model,
     add_id,
     drop_all_but_id,
     get_target_mean,
+    get_submission,
     read_testing_dataset,
     read_training_dataset,
     write_submission,
@@ -10,6 +11,7 @@ from pollos_petrel import (
 )
 import os
 import pandas as pd
+from pytest import approx
 
 
 # Lee train.csv
@@ -60,12 +62,23 @@ def test_add_id():
     assert "id" in obtained_columns
 
 
+def test_get_submission():
+    train_dataset = read_training_dataset()
+    predicted_target = predict_target_dummy_model(train_dataset)
+    submission = get_submission(train_dataset, predicted_target)
+    assert "target" in submission.columns
+    number_rows = len(submission)
+    none_rows = submission.target.isnull().sum()
+    assert number_rows != none_rows
+
+
 # Agrega columna target con el promedio
-def test_add_mean_as_target():
-    submission_with_mean_as_target = add_mean_as_target()
-    obtained_target = submission_with_mean_as_target["target"][1]
-    expected_target = 34.67101226993865
-    assert expected_target == obtained_target
+def test_predict_target_dummy_model():
+    train_dataset = read_training_dataset()
+    submission_with_mean_as_target = predict_target_dummy_model(train_dataset)
+    obtained_target = submission_with_mean_as_target
+    expected_target = 34.671
+    assert expected_target == approx(obtained_target, 0.01)
 
 
 # Guarda el archivo con sufijo _submission.csv
@@ -74,6 +87,9 @@ def test_write_submission():
     for submission_path in dict_submission_path.values():
         if os.path.exists(submission_path):
             os.remove(submission_path)
-        write_submission(submission_path, add_mean_as_target)
+        submission = write_submission(submission_path, predict_target_dummy_model)
+        number_rows = len(submission)
+        none_rows = submission.target.isnull().sum()
+        assert number_rows != none_rows
         assert os.path.exists(submission_path)
         os.remove(submission_path)
