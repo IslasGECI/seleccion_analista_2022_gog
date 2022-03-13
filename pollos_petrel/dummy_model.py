@@ -5,6 +5,7 @@ import pydantic
 class Path_To_Submission(pydantic.BaseModel):
     DummyModel = "pollos_petrel/example_python_submission.csv"
     LinearModel = "pollos_petrel/memo_1_submission.csv"
+    PowerModel = "pollos_petrel/memo_2_submission.csv"
 
 
 # Lee train.csv
@@ -48,14 +49,15 @@ def get_submission(test_dataset, predicted_target):
 
 
 # Agrega columna target con el promedio
-def add_mean_as_target() -> pd.DataFrame:
-    training_dataset = read_training_dataset()
-    testing_dataset = read_testing_dataset()
-    predicted_target = get_target_mean(training_dataset)
-    return get_submission(testing_dataset, predicted_target)
+def predict_target_dummy_model(train_dataset):
+    return get_target_mean(train_dataset)
 
 
 # Guarda el archivo con0 sufijo _submission.csv
-def write_submission(submission_path, predict_age):
-    submission = predict_age()
+def write_submission(submission_path, predict_target):
+    train_dataset = read_training_dataset()
+    test_dataset = read_testing_dataset()
+    predicted_target = predict_target(train_dataset)
+    submission = get_submission(test_dataset, predicted_target)
     submission.to_csv(submission_path)
+    return submission
