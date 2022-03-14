@@ -21,7 +21,9 @@ def get_target_from_linear_regression(train_dataset, test_dataset):
     return linear_model(test_dataset.Masa, *parameters)
 
 
-# Predice la edad a partir de la masa con modelo lineal
-def predict_target_linear_model(train_dataset) -> pd.DataFrame:
-    test_dataset = read_testing_dataset()
-    return get_target_from_linear_regression(train_dataset, test_dataset)
+class LinearModel:
+    submission_path = "pollos_petrel/memo_1_submission.csv"
+
+    def predict_target(train_dataset) -> pd.DataFrame:
+        test_dataset = read_testing_dataset()
+        return get_target_from_linear_regression(train_dataset, test_dataset)
