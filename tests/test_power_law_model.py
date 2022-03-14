@@ -1,7 +1,7 @@
 from pollos_petrel import (
     imputes_test_data,
+    Model,
     power_law_model,
-    predict_target_power_model,
     read_training_dataset,
     train_power_law_model,
 )
@@ -43,7 +43,7 @@ def test_imputes_test_data():
 
 def test_predict_target_power_model():
     train_dataset = read_training_dataset()
-    submission_predict_age_pollos_petrel = predict_target_power_model(train_dataset)
+    submission_predict_age_pollos_petrel = Model().PowerModel.predict_target(train_dataset)
     obtained_target = submission_predict_age_pollos_petrel[0]
     expected_target = 65.842
     assert expected_target == approx(obtained_target, 0.01)
