@@ -1,6 +1,6 @@
 from pollos_petrel import (
     linear_model,
-    predict_target_linear_model,
+    Model,
     read_training_dataset,
     train_linear_model,
 )
@@ -31,7 +31,7 @@ def test_train_linear_model():
 
 def test_predict_target_linear_model():
     train_dataset = read_training_dataset()
-    submission_predict_age_pollos_petrel = predict_target_linear_model(train_dataset)
+    submission_predict_age_pollos_petrel = Model().LinearModel.predict_target(train_dataset)
     obtained_target = submission_predict_age_pollos_petrel[0]
     expected_target = 47.512
     assert expected_target == approx(obtained_target, 0.01)
