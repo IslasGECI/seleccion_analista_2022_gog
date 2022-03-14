@@ -1,13 +1,12 @@
 from pollos_petrel import (
-    predict_target_dummy_model,
     add_id,
+    Model,
     drop_all_but_id,
     get_target_mean,
     get_submission,
     read_testing_dataset,
     read_training_dataset,
     write_submission,
-    Path_To_Submission,
 )
 import os
 import pandas as pd
@@ -64,7 +63,7 @@ def test_add_id():
 
 def test_get_submission():
     train_dataset = read_training_dataset()
-    predicted_target = predict_target_dummy_model(train_dataset)
+    predicted_target = Model().DummyModel.predict_target(train_dataset)
     submission = get_submission(train_dataset, predicted_target)
     assert "target" in submission.columns
     number_rows = len(submission)
@@ -73,23 +72,49 @@ def test_get_submission():
 
 
 # Agrega columna target con el promedio
-def test_predict_target_dummy_model():
+def test_predict_target():
     train_dataset = read_training_dataset()
-    submission_with_mean_as_target = predict_target_dummy_model(train_dataset)
+    submission_with_mean_as_target = Model.DummyModel.predict_target(train_dataset)
     obtained_target = submission_with_mean_as_target
     expected_target = 34.671
     assert expected_target == approx(obtained_target, 0.01)
 
 
-# Guarda el archivo con sufijo _submission.csv
-def test_write_submission():
-    dict_submission_path = Path_To_Submission().dict()
-    for submission_path in dict_submission_path.values():
-        if os.path.exists(submission_path):
-            os.remove(submission_path)
-        submission = write_submission(submission_path, predict_target_dummy_model)
-        number_rows = len(submission)
-        none_rows = submission.target.isnull().sum()
-        assert number_rows != none_rows
-        assert os.path.exists(submission_path)
+def remove_submission(submission_path):
+    if os.path.exists(submission_path):
         os.remove(submission_path)
+
+
+def compare_none_rows(submission):
+    number_rows = len(submission)
+    none_rows = submission.target.isnull().sum()
+    assert number_rows != none_rows
+
+
+def compare_path_exists(submission_path):
+    assert os.path.exists(submission_path)
+    os.remove(submission_path)
+
+
+def compare_path_and_none_rows(submission_path, submission):
+    compare_path_exists(submission_path)
+    compare_none_rows(submission)
+
+
+def test_write_submission():
+    for model_type in dir(Model)[1:4]:
+        if model_type == "DummyModel":
+            submission_path = Model.DummyModel.submission_path
+            remove_submission(submission_path)
+            submission = write_submission(Model.DummyModel)
+            compare_path_and_none_rows(submission_path, submission)
+        if model_type == "LinearModel":
+            submission_path = Model.LinearModel.submission_path
+            remove_submission(submission_path)
+            submission = write_submission(Model.LinearModel)
+            compare_path_and_none_rows(submission_path, submission)
+        if model_type == "PowerModel":
+            submission_path = Model.PowerModel.submission_path
+            remove_submission(submission_path)
+            submission = write_submission(Model.PowerModel)
+            compare_path_and_none_rows(submission_path, submission)
