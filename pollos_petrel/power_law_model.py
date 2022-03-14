@@ -5,7 +5,9 @@ from sklearn.experimental import enable_iterative_imputer  # noqa
 from sklearn.impute import IterativeImputer
 from sklearn.neighbors import KNeighborsRegressor
 import pandas as pd
-from .dummy_model import add_id
+from .dummy_model import add_id, DummyModel, get_submission, read_training_dataset
+from .linear_regression import LinearModel
+import pydantic
 
 
 # Modelo ley de potencia
@@ -63,7 +65,28 @@ def get_target_from_power_law(train_dataset, imputed_test_dataset):
     return power_law_model(imputed_test_dataset.Longitud_ala, *parameters)
 
 
-# Predice la edad a partir de la longitud del ala
-def predict_target_power_model(train_dataset) -> pd.DataFrame:
-    imputed_test_dataset = imputes_test_data()
-    return get_target_from_power_law(train_dataset, imputed_test_dataset)
+class PowerModel:
+    submission_path = "pollos_petrel/memo_2_submission.csv"
+
+    def predict_target(train_dataset) -> pd.DataFrame:
+        imputed_test_dataset = imputes_test_data()
+        return get_target_from_power_law(train_dataset, imputed_test_dataset)
+
+
+class Model(pydantic.BaseModel):
+    DummyModel = DummyModel
+    DummyModelPath = DummyModel.submission_path
+    LinearModel = LinearModel
+    LinearModelPath = LinearModel.submission_path
+    PowerModel = PowerModel
+    PowerModelPath = PowerModel.submission_path
+
+
+# Guarda el archivo con0 sufijo _submission.csv
+def write_submission(Model):
+    train_dataset = read_training_dataset()
+    test_dataset = read_testing_dataset()
+    predicted_target = Model.predict_target(train_dataset)
+    submission = get_submission(test_dataset, predicted_target)
+    submission.to_csv(Model.submission_path)
+    return submission
