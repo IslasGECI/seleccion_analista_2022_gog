@@ -75,11 +75,8 @@ class PowerModel:
 
 class Model(pydantic.BaseModel):
     DummyModel = DummyModel
-    DummyModelPath = DummyModel.submission_path
     LinearModel = LinearModel
-    LinearModelPath = LinearModel.submission_path
     PowerModel = PowerModel
-    PowerModelPath = PowerModel.submission_path
 
 
 # Guarda el archivo con0 sufijo _submission.csv
