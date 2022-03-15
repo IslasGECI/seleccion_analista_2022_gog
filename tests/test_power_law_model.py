@@ -6,7 +6,7 @@ from pollos_petrel import (
     train_power_law_model,
 )
 import pandas as pd
-from pytest import approx
+import pytest
 
 
 def test_power_law_model():
@@ -41,9 +41,22 @@ def test_imputes_test_data():
     assert obtained_longitud_ala == expected_longitud_ala
 
 
-def test_predict_target_power_model():
+EXPECTED_TARGET_FOR_MODEL = {"linear": 47.512, "power": 65.842}
+PREDICT_TARGET_FROM_MODEL = {
+    "linear": Model().LinearModel.predict_target,
+    "power": Model().PowerModel.predict_target,
+}
+
+
+testdata = [
+    (EXPECTED_TARGET_FOR_MODEL["linear"], PREDICT_TARGET_FROM_MODEL["linear"]),
+    (EXPECTED_TARGET_FOR_MODEL["power"], PREDICT_TARGET_FROM_MODEL["power"]),
+]
+
+
+@pytest.mark.parametrize("expected, predict_target", testdata)
+def test_predict_target_power_model(expected, predict_target):
     train_dataset = read_training_dataset()
-    submission_predict_age_pollos_petrel = Model().PowerModel.predict_target(train_dataset)
+    submission_predict_age_pollos_petrel = predict_target(train_dataset)
     obtained_target = submission_predict_age_pollos_petrel[0]
-    expected_target = 65.842
-    assert expected_target == approx(obtained_target, 0.01)
+    assert expected == pytest.approx(obtained_target, 0.01)
