@@ -1,49 +1,7 @@
-from pollos_petrel import (
-    add_mean_as_target,
-    add_id,
-    drop_all_but_id,
-    get_target_mean,
-    read_testing_dataset,
-    read_training_dataset,
-    write_submission,
-)
+from pollos_petrel import add_id, Model, write_submission
 import os
 import pandas as pd
-
-
-# Lee train.csv
-def test_read_training_dataset():
-    training_dataset = read_training_dataset()
-    obtained_n_rows = training_dataset.shape[0]
-    expected_n_rows = 1304
-    assert expected_n_rows == obtained_n_rows
-
-
-# Calcula promedio de target
-def test_get_target_mean():
-    data = {"id": [1, 2], "target": [3, 4]}
-    dataset = pd.DataFrame(data=data)
-    obtained_mean = get_target_mean(dataset)
-    expected_mean = 3.5
-    assert expected_mean == obtained_mean
-
-
-# Lee test.csv
-def test_read_testing_dataset():
-    testing_dataset = read_testing_dataset()
-    obtained_n_rows = testing_dataset.shape[0]
-    expected_n_rows = 326
-    assert expected_n_rows == obtained_n_rows
-
-
-# Tira todas las columnas excepto id
-def test_drop_all_but_id():
-    data = {"id": [1, 2], "target": [3, 4]}
-    dataset = pd.DataFrame(data=data)
-    dataset_only_id = drop_all_but_id(dataset)
-    obtained_columns = list(dataset_only_id.columns)
-    expected_columns = ["id"]
-    assert expected_columns == obtained_columns
+import pytest
 
 
 def test_add_id():
@@ -59,19 +17,51 @@ def test_add_id():
     assert "id" in obtained_columns
 
 
-# Agrega columna target con el promedio
-def test_add_mean_as_target():
-    submission_with_mean_as_target = add_mean_as_target()
-    obtained_target = submission_with_mean_as_target["target"][1]
-    expected_target = 34.67101226993865
-    assert expected_target == obtained_target
-
-
-# Guarda el archivo con sufijo _submission.csv
-def test_write_submission():
-    submission_path = "pollos_petrel/example_python_submission.csv"
+def remove_submission(submission_path):
     if os.path.exists(submission_path):
         os.remove(submission_path)
-    write_submission()
+
+
+def compare_none_rows(submission):
+    number_rows = len(submission)
+    none_rows = submission.target.isnull().sum()
+    assert number_rows != none_rows
+
+
+def compare_path_exists(submission_path):
     assert os.path.exists(submission_path)
     os.remove(submission_path)
+
+
+def compare_path_and_none_rows(submission_path, submission):
+    compare_path_exists(submission_path)
+    compare_none_rows(submission)
+
+
+SUBMISSION_PATHS = {
+    "dummy": Model.DummyModel.submission_path,
+    "linear": Model.LinearModel.submission_path,
+    "power": Model.PowerModel.submission_path,
+}
+
+
+MODEL_SELECTION = {
+    "dummy": Model.DummyModel,
+    "linear": Model.LinearModel,
+    "power": Model.PowerModel,
+}
+
+testdata = [
+    (SUBMISSION_PATHS["dummy"], MODEL_SELECTION["dummy"]),
+    (SUBMISSION_PATHS["linear"], MODEL_SELECTION["linear"]),
+    (SUBMISSION_PATHS["power"], MODEL_SELECTION["power"]),
+]
+
+
+@pytest.mark.parametrize(
+    "submission_path, model_selection", testdata, ids=["dummy", "linear", "power"]
+)
+def test_write_submission(submission_path, model_selection):
+    remove_submission(submission_path)
+    submission = write_submission(model_selection)
+    compare_path_and_none_rows(submission_path, submission)

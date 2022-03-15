@@ -41,16 +41,8 @@ def get_submission(test_dataset, predicted_target):
     return submission
 
 
-# Agrega columna target con el promedio
-def add_mean_as_target() -> pd.DataFrame:
-    training_dataset = read_training_dataset()
-    testing_dataset = read_testing_dataset()
-    predicted_target = get_target_mean(training_dataset)
-    return get_submission(testing_dataset, predicted_target)
-
-
-# Guarda el archivo con sufijo _submission.csv
-def write_submission():
+class DummyModel:
     submission_path = "pollos_petrel/example_python_submission.csv"
-    submission = add_mean_as_target()
-    submission.to_csv(submission_path)
+
+    def predict_target(train_dataset):
+        return get_target_mean(train_dataset)

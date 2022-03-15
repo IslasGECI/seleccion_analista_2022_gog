@@ -1,15 +1,5 @@
-from pollos_petrel import imputes_test_data, power_law_model, train_power_law_model
+from pollos_petrel import imputes_test_data, train_power_law_model
 import pandas as pd
-
-
-def test_power_law_model():
-    x = 4
-    constant_factor = 2
-    power_law_index = 0.5
-    y_intercept = 1
-    obtained_result = power_law_model(x, constant_factor, power_law_index, y_intercept)
-    expected_result = 5
-    assert obtained_result == expected_result
 
 
 def test_train_power_law_model():
