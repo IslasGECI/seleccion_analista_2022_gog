@@ -58,7 +58,9 @@ testdata = [
 ]
 
 
-@pytest.mark.parametrize("submission_path, model_selection", testdata)
+@pytest.mark.parametrize(
+    "submission_path, model_selection", testdata, ids=["dummy", "linear", "power"]
+)
 def test_write_submission(submission_path, model_selection):
     remove_submission(submission_path)
     submission = write_submission(model_selection)
