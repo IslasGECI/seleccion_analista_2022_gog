@@ -54,7 +54,7 @@ testdata = [
 ]
 
 
-@pytest.mark.parametrize("expected, predict_target", testdata)
+@pytest.mark.parametrize("expected, predict_target", testdata, ids = ["linear", "power"])
 def test_predict_target_power_model(expected, predict_target):
     train_dataset = read_training_dataset()
     submission_predict_age_pollos_petrel = predict_target(train_dataset)
