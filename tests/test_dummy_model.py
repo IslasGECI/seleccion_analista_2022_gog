@@ -10,7 +10,7 @@ from pollos_petrel import (
 )
 import os
 import pandas as pd
-from pytest import approx
+import pytest
 
 
 # Lee train.csv
@@ -71,15 +71,6 @@ def test_get_submission():
     assert number_rows != none_rows
 
 
-# Agrega columna target con el promedio
-def test_predict_target():
-    train_dataset = read_training_dataset()
-    submission_with_mean_as_target = Model.DummyModel.predict_target(train_dataset)
-    obtained_target = submission_with_mean_as_target
-    expected_target = 34.671
-    assert expected_target == approx(obtained_target, 0.01)
-
-
 def remove_submission(submission_path):
     if os.path.exists(submission_path):
         os.remove(submission_path)
@@ -101,20 +92,28 @@ def compare_path_and_none_rows(submission_path, submission):
     compare_none_rows(submission)
 
 
-def test_write_submission():
-    for model_type in dir(Model)[1:4]:
-        if model_type == "DummyModel":
-            submission_path = Model.DummyModel.submission_path
-            remove_submission(submission_path)
-            submission = write_submission(Model.DummyModel)
-            compare_path_and_none_rows(submission_path, submission)
-        if model_type == "LinearModel":
-            submission_path = Model.LinearModel.submission_path
-            remove_submission(submission_path)
-            submission = write_submission(Model.LinearModel)
-            compare_path_and_none_rows(submission_path, submission)
-        if model_type == "PowerModel":
-            submission_path = Model.PowerModel.submission_path
-            remove_submission(submission_path)
-            submission = write_submission(Model.PowerModel)
-            compare_path_and_none_rows(submission_path, submission)
+SUBMISSION_PATHS = {
+    "dummy": Model.DummyModel.submission_path,
+    "linear": Model.LinearModel.submission_path,
+    "power": Model.PowerModel.submission_path,
+}
+
+
+MODEL_SELECTION = {
+    "dummy": Model.DummyModel,
+    "linear": Model.LinearModel,
+    "power": Model.PowerModel,
+}
+
+testdata = [
+    (SUBMISSION_PATHS["dummy"], MODEL_SELECTION["dummy"]),
+    (SUBMISSION_PATHS["linear"], MODEL_SELECTION["linear"]),
+    (SUBMISSION_PATHS["power"], MODEL_SELECTION["power"]),
+]
+
+
+@pytest.mark.parametrize("submission_path, model_selection", testdata)
+def test_write_submission(submission_path, model_selection):
+    remove_submission(submission_path)
+    submission = write_submission(model_selection)
+    compare_path_and_none_rows(submission_path, submission)
