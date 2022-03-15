@@ -1,51 +1,7 @@
-from pollos_petrel import (
-    add_id,
-    Model,
-    drop_all_but_id,
-    get_target_mean,
-    get_submission,
-    read_testing_dataset,
-    read_training_dataset,
-    write_submission,
-)
+from pollos_petrel import add_id, Model, write_submission
 import os
 import pandas as pd
 import pytest
-
-
-# Lee train.csv
-def test_read_training_dataset():
-    training_dataset = read_training_dataset()
-    obtained_n_rows = training_dataset.shape[0]
-    expected_n_rows = 1304
-    assert expected_n_rows == obtained_n_rows
-
-
-# Calcula promedio de target
-def test_get_target_mean():
-    data = {"id": [1, 2], "target": [3, 4]}
-    dataset = pd.DataFrame(data=data)
-    obtained_mean = get_target_mean(dataset)
-    expected_mean = 3.5
-    assert expected_mean == obtained_mean
-
-
-# Lee test.csv
-def test_read_testing_dataset():
-    testing_dataset = read_testing_dataset()
-    obtained_n_rows = testing_dataset.shape[0]
-    expected_n_rows = 326
-    assert expected_n_rows == obtained_n_rows
-
-
-# Tira todas las columnas excepto id
-def test_drop_all_but_id():
-    data = {"id": [1, 2], "target": [3, 4]}
-    dataset = pd.DataFrame(data=data)
-    dataset_only_id = drop_all_but_id(dataset)
-    obtained_columns = list(dataset_only_id.columns)
-    expected_columns = ["id"]
-    assert expected_columns == obtained_columns
 
 
 def test_add_id():
@@ -59,16 +15,6 @@ def test_add_id():
     assert obtained_id == expected_id
     obtained_columns = list(dataset_add_id)
     assert "id" in obtained_columns
-
-
-def test_get_submission():
-    train_dataset = read_training_dataset()
-    predicted_target = Model().DummyModel.predict_target(train_dataset)
-    submission = get_submission(train_dataset, predicted_target)
-    assert "target" in submission.columns
-    number_rows = len(submission)
-    none_rows = submission.target.isnull().sum()
-    assert number_rows != none_rows
 
 
 def remove_submission(submission_path):
