@@ -5,7 +5,6 @@ from pollos_petrel import (
 )
 import pandas as pd
 
-
 def test_power_law_model():
     x = 4
     constant_factor = 2
